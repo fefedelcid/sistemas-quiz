@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Repaso SO · Parcial U1–U3</title>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;800&family=Newsreader:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f5;--panel:#fff;--ink:#16202e;--mute:#5d6b7d;--line:#d5dce6;--u1:#2a6f97;--u2:#2f7d57;--u3:#8a4a9c;--ok:#1f8a4c;--bad:#c23b3b;--sans:'Schibsted Grotesk',system-ui,sans-serif;--ser:'Newsreader',Georgia,serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1621;--panel:#18212f;--ink:#e8edf4;--mute:#9aa8ba;--line:#2b384a;--u1:#6fb4dc;--u2:#6fcf9b;--u3:#c79ae0;--ok:#55d08a;--bad:#ff7b7b}}
+:root[data-theme=dark]{--bg:#0f1621;--panel:#18212f;--ink:#e8edf4;--mute:#9aa8ba;--line:#2b384a;--u1:#6fb4dc;--u2:#6fcf9b;--u3:#c79ae0;--ok:#55d08a;--bad:#ff7b7b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--u1);outline-offset:2px}
+header{max-width:900px;margin:0 auto;padding:20px 16px 8px}
+h1{font:500 clamp(26px,5vw,38px)/1.1 var(--ser);margin:0 0 4px}
+.sub{color:var(--mute);margin:0}
+nav{display:flex;gap:6px;max-width:900px;margin:12px auto 0;padding:0 16px;overflow-x:auto}
+nav button,.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 16px;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:900px;margin:0 auto;padding:16px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.chip[aria-pressed=true]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
+:root[data-theme=dark] .chip[aria-pressed=true],:root:not([data-theme=light]) .chip[aria-pressed=true]{color:#0f1621}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;border-left:6px solid var(--c)}
+.flash{min-height:260px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;text-align:left;width:100%}
+.flash .tag{color:var(--c);font-weight:600;font-size:14px}
+.flash .q{font:500 clamp(22px,4vw,28px)/1.25 var(--ser);margin:6px 0}
+.flash .a{white-space:pre-line;margin-top:8px}
+.hint{color:var(--mute);font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 16px}
+.btn.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}.btn.no{border-color:var(--bad);color:var(--bad)}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border:1px solid var(--line);background:var(--bg);border-radius:10px}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--panel))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--panel))}
+.expl{margin-top:12px;padding:12px;border-radius:10px;background:var(--bg)}
+table{border-collapse:collapse;width:100%}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--mute);font-size:14px}
+.tw{overflow-x:auto}
+td input{width:64px;padding:5px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.gantt{display:flex;margin-top:6px;min-width:max-content}
+.seg{height:44px;border:1px solid var(--bg);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;position:relative}
+.seg span.t{position:absolute;left:-4px;bottom:-22px;font-size:12px;color:var(--mute);font-weight:400}
+.seg.idle{background:repeating-linear-gradient(45deg,var(--line),var(--line) 4px,transparent 4px,transparent 8px);color:var(--mute)}
+.gw{overflow-x:auto;padding-bottom:28px}
+.stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px}
+.stats b{font:500 28px var(--ser);display:block}
+.note{color:var(--mute);font-size:14px;margin-top:10px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--bg);font-size:13px;margin-left:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<h1>Sistemas Operativos: repaso de parcial</h1>
+<p class="sub">Unidades 1 a 3 · tarjetas, quiz y simulador de planificación</p>
+</header>
+<nav role="tablist" id="nav"></nav>
+<main id="app"></main>
+
+<script>
+const U={1:{n:'U1 Conceptos',c:'var(--u1)'},2:{n:'U2 Procesos e hilos',c:'var(--u2)'},3:{n:'U3 Procesador',c:'var(--u3)'}};
+// Tarjetas: [unidad, pregunta, respuesta]
+const CARDS=[
+[1,'¿Cuáles son los 3 objetivos del SO?','1. Abstracción del hardware (máquina virtual más simple).\n2. Operación eficiente del equipo.\n3. Capacidad para evolucionar.\nNo los mezcles: abstraer ≠ usar bien los recursos.'],
+[1,'Modo dual de ejecución','Un bit del procesador distingue quién tiene el control:\nMonitor (bit 0): kernel.\nProblema (bit 1): programa de usuario.\nLa E/S es instrucción privilegiada: el usuario la pide al SO.'],
+[1,'Pasos de atención de una interrupción','1. El dispositivo emite la señal.\n2. La CPU termina la instrucción y consulta pendientes.\n3. El SO salva el contexto.\n4. Identifica el tipo y carga en el PC la rutina.\n5. Se ejecuta la rutina.\n6. Se restaura el contexto y se devuelve el control.'],
+[1,'Tipos de interrupciones','De programa (división por cero, instrucción ilegal), de reloj (alterna procesos), de E/S (fin de operación o error) y por fallo de hardware (corte de energía, error de paridad).'],
+[1,'Multiprogramación vs. tiempo compartido','Multiprogramación: maximiza el uso de la computadora, reparte por prioridades, trabaja con jobs.\nTiempo compartido: maximiza la eficiencia del usuario, reparte por quantum, trabaja con sesiones de terminal.'],
+[1,'Sistema embebido vs. tiempo real','Son independientes. Un RTOS garantiza plazos (peor caso de latencia de interrupción y de cambio de contexto). Un embebido hace pocas funciones específicas. Pueden coincidir, pero no siempre.'],
+[1,'Acoplamiento débil vs. fuerte, SMP vs. ASMP','Débil: cada sistema con su SO (cluster/distribuido).\nFuerte: memoria común y un único SO.\nSMP: procesadores equivalentes.\nASMP: funciones distintas (unos corren el SO, otros trabajos de usuario).'],
+[1,'Hypervisor tipo 1 vs. tipo 2','Tipo 1 corre directo sobre el hardware (Hyper-V, KVM, vSphere).\nTipo 2 corre sobre un SO anfitrión (VirtualBox, VMware Workstation).'],
+[1,'Monolítico, microkernel e híbrido','Monolítico: los 4 componentes en el kernel (rápido, poco aislado). Ej.: Linux, BSD.\nMicrokernel: solo planificación, memoria e IPC básico (confiable, más lento). Ej.: Minix, QNX.\nHíbrido: micronúcleo + servicios extra como E/S. Ej.: Windows, Android.'],
+[1,'¿Por qué el microkernel es más lento?','Por el costo del paso de mensajes (IPC) entre espacio de usuario y núcleo: 4 cambios de contexto contra 2 del monolítico para el mismo pedido.'],
+[2,'Job vs. proceso vs. programa','Job: unidad de trabajo externa. Proceso: unidad de trabajo interna (un job puede generar varios). Programa: código estático. Proceso: programa en ejecución, dinámico.'],
+[2,'Un proceso es una entidad con…','1. Código de programa.\n2. Contexto de ejecución (registros, prioridad, estado de E/S): lo maneja el SO y el proceso no puede acceder.\n3. Recursos asociados (memoria, archivos, periféricos).'],
+[2,'Los 6 estados de un proceso','Nuevo, Listo, Activo, Bloqueado, Suspendido y Terminado.'],
+[2,'Transiciones clave del DTE','Nuevo→Listo: admisión (largo plazo).\nListo→Activo: scheduler (corto plazo).\nActivo→Listo: fin de quantum o proceso de mayor prioridad.\nActivo→Bloqueado: espera E/S o evento.\nBloqueado→Listo: ocurre el evento.\nBloqueado→Suspendido: pasa a disco para liberar memoria.'],
+[2,'Contenido del BCP (3 categorías)','1. Identificación (PID, PID padre, usuario).\n2. Estado del procesador (registros, PC, PSW, puntero de pila).\n3. Control del proceso (estado, prioridad, memoria, recursos, IPC).'],
+[2,'¿Por qué la TBCP es la estructura más importante?','Casi todos los módulos del SO la leen o modifican (planificación, recursos, monitoreo). Riesgos: un fallo de una rutina puede dañar los BCP, y cambiar su estructura impacta en muchos módulos.'],
+[2,'Imagen del proceso','Programa de usuario + datos de usuario + pila del sistema + BCP.'],
+[2,'¿Qué separa un hilo de un proceso?','El proceso tiene dos facetas: propiedad de recursos y planificación/ejecución. El hilo es la unidad de ejecución. Hilos + recursos = proceso.'],
+[2,'Ventajas de los hilos','Crear un hilo es hasta 10 veces más rápido que un proceso. Cambiar y terminar es más barato. Se comunican por memoria compartida, sin pasar por el núcleo.'],
+[2,'¿Qué estado no tiene un hilo?','Suspendido. Sacar un hilo de memoria afectaría a todos los hilos del proceso, que comparten el espacio de direcciones.'],
+[2,'Planificador de corto vs. largo plazo','Corto plazo (scheduler, bajo nivel): elige de la cola de Listos quién usa la CPU.\nLargo plazo (alto nivel): elige trabajos de la cola de trabajos y decide la admisión.'],
+[3,'Scheduler, controlador de tráfico y dispatcher','Scheduler: decide qué proceso va.\nControlador de tráfico: protege el acceso a las tablas (TBCP), p. ej. Activo→Bloqueado.\nDispatcher: carga el contexto y entrega la CPU.'],
+[3,'Tareas del dispatcher','1. Pasar a modo privilegiado.\n2. Salvar registros del proceso saliente en su BCP y cargar los del entrante.\n3. Volver a modo usuario.\n4. Entregar la CPU.'],
+[3,'Throughput, turnaround y overhead','Throughput: procesos por unidad de tiempo (maximizar).\nTurnaround: tiempo desde el ingreso hasta el fin (minimizar).\nOverhead: tiempo del SO en sus propias tareas (minimizar).'],
+[3,'SJF vs. SRTF','SJF elige la ráfaga de CPU más corta solo cuando la CPU queda libre (sin desalojo).\nSRTF compara con el tiempo remanente y puede desalojar al llegar un proceso más corto.'],
+[3,'Round-Robin y el quantum','Cada proceso recibe un quantum y, al vencer, vuelve a Listos. Quantum muy chico: más overhead. Muy grande: se parece a FCFS. Tiende a favorecer a los I/O-bound.'],
+[3,'Inanición y cómo evitarla','Procesos de baja prioridad nunca llegan a la CPU. Con prioridades: envejecimiento (subir la prioridad con el tiempo). Con colas múltiples: HPP (Hora de Próximo Procesador).'],
+[3,'Granularidad de sincronización','Independiente: sin sincronización (tiempo compartido).\nGrano grueso: 200 a 1.000.000 instrucciones.\nGrano medio: 20 a 200 (hilos de un proceso).\nGrano fino: menos de 20.'],
+[3,'Asignación estática vs. dinámica, maestro/esclavo vs. camaradas','Estática: proceso fijo a un procesador (menos overhead, puede haber ociosidad). Dinámica: cola global.\nMaestro/esclavo: el kernel corre en un procesador y es cuello de botella.\nCamaradas: cada procesador se autoplanifica (más complejo).'],
+[3,'Algoritmos multiprocesador','Compartición de carga: cola global única.\nPandilla (gang): los hilos de un proceso corren a la vez en varios procesadores.\nProcesador dedicado: 1 procesador por hilo.\nDinámica: el número de procesadores por proceso cambia en el tiempo.'],
+[3,'¿Cuándo sirve la planificación en grupo?','Para procesos multihilo con cooperación estrecha (grano medio o fino). En un proceso monohilo no mejora nada.']
+];
+// Quiz: [unidad, pregunta, correcta, incorrecta1, incorrecta2, incorrecta3, explicación]
+const QZ=[
+[1,'¿Qué significa que la E/S sea una instrucción privilegiada?','Solo puede ejecutarla el SO en estado Monitor','Solo el usuario puede ejecutarla en estado Problema','Solo se ejecuta durante una interrupción de reloj','Requiere dos procesadores','El programa de usuario pide la E/S al kernel, que la hace en su nombre.'],
+[1,'En el modo dual, el bit en 0 corresponde a…','Estado de Monitor (kernel)','Estado de Problema (usuario)','Estado Suspendido','Estado Bloqueado','Monitor=0 y Problema=1.'],
+[1,'¿Cuál es el sistema operativo con menor aislamiento de fallos?','Kernel monolítico','Microkernel','Hypervisor tipo 1','Ninguno, todos son iguales','En el monolítico todo corre en modo privilegiado y en el mismo espacio de direcciones.'],
+[1,'Un sistema embebido…','No necesariamente es de tiempo real','Siempre es de tiempo real','Siempre usa un microkernel','No puede usar Linux','Embebido y tiempo real son conceptos independientes.'],
+[1,'VirtualBox es un hypervisor de tipo…','2, se ejecuta sobre un SO anfitrión','1, se ejecuta sobre el hardware','1, porque virtualiza hardware','Ninguno: es un emulador de CPU','Tipo 1 corre bare-metal (KVM, Hyper-V); tipo 2 corre sobre un host.'],
+[1,'La multiprogramación busca principalmente…','Maximizar el uso de la computadora','Maximizar la eficiencia de cada usuario','Eliminar el overhead','Evitar las interrupciones','El tiempo compartido es el que prioriza la eficiencia del usuario.'],
+[2,'¿Qué transición dispara el planificador de largo plazo?','Nuevo → Listo','Listo → Activo','Activo → Bloqueado','Bloqueado → Listo','El largo plazo decide la admisión. El corto plazo elige quién pasa a Activo.'],
+[2,'Un proceso Activo pide una lectura de disco. Pasa a…','Bloqueado','Listo','Suspendido','Terminado','Activo → Bloqueado cuando espera un evento o E/S.'],
+[2,'¿Qué estado NO tiene un hilo?','Suspendido','Listo','Bloqueado','Activo','Suspender un hilo afectaría a todo el proceso, porque comparten memoria.'],
+[2,'¿Qué comparten los hilos de un mismo proceso?','Espacio de memoria y archivos abiertos','La pila de ejecución','El estado de ejecución','Los registros','Cada hilo tiene su propia pila, registros y estado.'],
+[2,'El BCP incluye…','Identificación, estado del procesador e información de control','Solo el PID y el estado','Únicamente los registros','El código del programa','Son las 3 categorías del BCP.'],
+[2,'¿Por qué comunicar hilos es más barato que comunicar procesos?','Comparten memoria y no necesitan invocar al núcleo','Usan interrupciones de reloj','No usan memoria','Tienen distinta prioridad','Los procesos independientes requieren pasar por el núcleo (cambio de contexto).'],
+[3,'¿Quién carga el contexto del proceso elegido y le da la CPU?','El dispatcher','El scheduler','El controlador de tráfico','El planificador de largo plazo','El scheduler decide y el dispatcher ejecuta.'],
+[3,'La diferencia entre SJF y SRTF es que SRTF…','Puede desalojar al proceso activo','Usa quantum','No necesita estimar ráfagas','Es FCFS con prioridades','SJF sin desalojo solo decide cuando la CPU queda libre.'],
+[3,'Quantum de Round-Robin muy grande: el comportamiento se parece a…','FCFS','SRTF','Prioridades','Colas múltiples','Si nadie agota el quantum, se atiende en orden de llegada.'],
+[3,'¿Cuál es la solución al problema de inanición por prioridades?','Envejecimiento','HPP','Gang scheduling','Quantum fijo','HPP se usa con colas múltiples.'],
+[3,'Hilos de un mismo proceso suelen ser de grano…','Medio','Independiente','Grueso','Ninguno','20 a 200 instrucciones entre sincronizaciones.'],
+[3,'¿Qué algoritmo multiprocesador planifica todos los hilos de un proceso a la vez en varios procesadores?','Planificación en grupo (pandilla)','Compartición de carga','Planificación dinámica','Maestro/esclavo','Reduce el bloqueo por sincronización.'],
+[3,'Desventaja principal de la arquitectura maestro/esclavo','El fallo del maestro cae todo el sistema','Cada procesador se autoplanifica','Necesita memoria distribuida','No permite hilos','El maestro corre las funciones clave del núcleo y es cuello de botella.'],
+[3,'Compartición de carga: ¿cuál es su desventaja?','Cuello de botella en la cola central y mala caché','Requiere conocer el futuro','Deja procesadores ociosos permanentemente','No funciona con hilos','Un hilo desalojado rara vez retoma en el mismo procesador.']
+];
+const $=s=>document.querySelector(s),app=$('#app');
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let S={tab:'cards',units:new Set([1,2,3]),known:{}};
+try{const r=JSON.parse(localStorage.getItem('so-known')||'{}');S.known=r}catch(e){}
+const save=()=>{try{localStorage.setItem('so-known',JSON.stringify(S.known))}catch(e){}};
+const TABS=[['cards','Tarjetas'],['quiz','Quiz'],['sim','Simulador']];
+function nav(){$('#nav').innerHTML=TABS.map(([k,t])=>`<button role="tab" aria-selected="${S.tab===k}" data-t="${k}">${t}</button>`).join('');
+$('#nav').onclick=e=>{const t=e.target.dataset.t;if(t){S.tab=t;render()}}}
+function filters(){return `<div class="filters" role="group" aria-label="Unidades">${[1,2,3].map(u=>`<button class="chip" style="--c:${U[u].c}" aria-pressed="${S.units.has(u)}" data-u="${u}">${U[u].n}</button>`).join('')}</div>`}
+function bindFilters(cb){app.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{const u=+b.dataset.u;S.units.has(u)?S.units.size>1&&S.units.delete(u):S.units.add(u);cb()})}
+// ---- Tarjetas
+let fc={deck:[],i:0,flip:false,onlyPending:false};
+function buildDeck(){fc.deck=CARDS.map((c,i)=>({c,i})).filter(o=>S.units.has(o.c[0])&&(!fc.onlyPending||!S.known[o.i]));fc.i=0;fc.flip=false}
+function cards(){
+if(!fc.deck.length&&!fc.built){buildDeck();fc.built=1}
+const total=CARDS.filter(c=>S.units.has(c[0])).length,kn=CARDS.filter((c,i)=>S.units.has(c[0])&&S.known[i]).length;
+let h=filters()+`<div class="filters"><button class="chip" aria-pressed="${fc.onlyPending}" id="pend">Solo pendientes</button><button class="chip" id="shuf">Mezclar</button><span class="hint">${kn} de ${total} dominadas</span></div><div class="bar"><i style="width:${total?kn/total*100:0}%"></i></div>`;
+if(!fc.deck.length)h+=`<div class="card" style="--c:var(--ok)"><p class="q" style="font:500 24px var(--ser)">No quedan tarjetas pendientes.</p><p class="hint">Desactivá "Solo pendientes" o reiniciá tu progreso.</p><button class="btn" id="reset">Reiniciar progreso</button></div>`;
+else{const {c,i}=fc.deck[fc.i];
+h+=`<button class="card flash" style="--c:${U[c[0]].c}" id="flip" aria-label="Dar vuelta la tarjeta"><span class="tag">${U[c[0]].n}${S.known[i]?'<span class="pill">dominada</span>':''}</span><span class="q">${c[1]}</span>${fc.flip?`<span class="a">${c[2]}</span>`:'<span class="hint">Tocá o presioná espacio para ver la respuesta</span>'}</button>
+<div class="row"><button class="btn" id="prev">Anterior</button><span class="hint">${fc.i+1} / ${fc.deck.length}</span><button class="btn" id="next">Siguiente</button><span style="flex:1"></span><button class="btn no" id="rep">Repasar</button><button class="btn ok" id="got">La sabía</button></div>`}
+app.innerHTML=h;bindFilters(()=>{buildDeck();render()});
+const g=id=>document.getElementById(id);
+g('pend')&&(g('pend').onclick=()=>{fc.onlyPending=!fc.onlyPending;buildDeck();render()});
+g('shuf')&&(g('shuf').onclick=()=>{fc.deck=sh(fc.deck);fc.i=0;fc.flip=false;render()});
+g('reset')&&(g('reset').onclick=()=>{S.known={};save();fc.onlyPending=false;buildDeck();render()});
+if(!fc.deck.length)return;
+const mv=d=>{fc.i=(fc.i+d+fc.deck.length)%fc.deck.length;fc.flip=false;render()};
+g('flip').onclick=()=>{fc.flip=!fc.flip;render()};
+g('prev').onclick=()=>mv(-1);g('next').onclick=()=>mv(1);
+const mark=v=>{const id=fc.deck[fc.i].i;v?S.known[id]=1:delete S.known[id];save();if(fc.onlyPending&&v){buildDeck();render()}else mv(1)};
+g('got').onclick=()=>mark(1);g('rep').onclick=()=>mark(0);
+}
+document.addEventListener('keydown',e=>{if(S.tab!=='cards'||!fc.deck.length||/INPUT|SELECT/.test(e.target.tagName))return;
+if(e.key===' '&&e.target.id!=='flip'){e.preventDefault();fc.flip=!fc.flip;render()}
+else if(e.key==='ArrowRight'){fc.i=(fc.i+1)%fc.deck.length;fc.flip=false;render()}
+else if(e.key==='ArrowLeft'){fc.i=(fc.i-1+fc.deck.length)%fc.deck.length;fc.flip=false;render()}});
+// ---- Quiz
+let qz={list:null,i:0,score:0,picked:null,opts:[],wrong:[]};
+function qStart(onlyWrong){const base=onlyWrong?qz.wrong:QZ.filter(q=>S.units.has(q[0]));qz={list:sh(base),i:0,score:0,picked:null,opts:[],wrong:[]};qOpts()}
+function qOpts(){const q=qz.list[qz.i];if(q)qz.opts=sh([q[2],q[3],q[4],q[5]])}
+function quiz(){
+if(!qz.list){app.innerHTML=filters()+`<div class="card" style="--c:var(--ink)"><p style="font:500 24px var(--ser);margin:0 0 6px">Quiz de opción múltiple</p><p class="hint">${QZ.filter(q=>S.units.has(q[0])).length} preguntas con las unidades elegidas. Las opciones se mezclan cada vez.</p><button class="btn p" id="go">Empezar</button></div>`;bindFilters(render);$('#go').onclick=()=>{qStart();render()};return}
+if(qz.i>=qz.list.length){const n=qz.list.length;app.innerHTML=`<div class="card" style="--c:${qz.score/n>=.6?'var(--ok)':'var(--bad)'}"><p style="font:500 34px var(--ser);margin:0">${qz.score} de ${n}</p><p class="hint">${qz.wrong.length?'Repasá las que fallaste y volvé a intentar.':'Sin errores. Probá con tarjetas pendientes o el simulador.'}</p><div class="row">${qz.wrong.length?'<button class="btn p" id="rw">Repetir las falladas</button>':''}<button class="btn" id="again">Nuevo intento</button></div></div>`;
+$('#rw')&&($('#rw').onclick=()=>{qStart(true);render()});$('#again').onclick=()=>{qStart();render()};return}
+const q=qz.list[qz.i],d=qz.picked!==null;
+app.innerHTML=`<div class="bar"><i style="width:${qz.i/qz.list.length*100}%"></i></div><div class="card" style="--c:${U[q[0]].c}"><span class="hint">${U[q[0]].n} · pregunta ${qz.i+1} de ${qz.list.length}</span><p style="font:500 24px/1.25 var(--ser);margin:6px 0 10px">${q[1]}</p>${qz.opts.map((o,k)=>`<button class="opt ${d?(o===q[2]?'right':k===qz.picked?'wrong':''):''}" data-k="${k}" ${d?'disabled':''}>${o}</button>`).join('')}${d?`<div class="expl"><b>${qz.opts[qz.picked]===q[2]?'Correcto.':'Incorrecto.'}</b> ${q[6]}</div><div class="row"><button class="btn p" id="nx">${qz.i+1<qz.list.length?'Siguiente':'Ver resultado'}</button></div>`:''}</div>`;
+app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{qz.picked=+b.dataset.k;if(qz.opts[qz.picked]===q[2])qz.score++;else qz.wrong.push(q);render()});
+$('#nx')&&($('#nx').onclick=()=>{qz.i++;qz.picked=null;qOpts();render()});
+}
+// ---- Simulador
+const COL=['#2a6f97','#2f7d57','#8a4a9c','#b5651d','#c23b6b','#4b5fb0','#7a7a1f','#1e8a8a'];
+let sm={algo:'FCFS',q:2,ps:[{a:0,b:5,p:2},{a:1,b:3,p:1},{a:2,b:8,p:3},{a:3,b:2,p:2}]};
+const ALGOS={FCFS:'FCFS',SJF:'SJF sin desalojo',SRTF:'SRTF (SJF con desalojo)',PRIO:'Prioridades (menor número = mayor prioridad)',RR:'Round-Robin'};
+function simulate(){const ps=sm.ps,n=ps.length,rem=ps.map(p=>p.b),fin=Array(n).fill(0),tl=[];let done=0,cur=null,ql=0,rq=[],added=new Set();
+for(let t=0;done<n&&t<2000;t++){
+ps.forEach((p,i)=>{if(p.a===t&&!added.has(i)){rq.push(i);added.add(i)}});
+if(sm.algo==='RR'&&cur!==null&&ql===0){rq.push(cur);cur=null}
+const ready=ps.map((p,i)=>i).filter(i=>ps[i].a<=t&&rem[i]>0);
+if(sm.algo==='RR'){if(cur===null&&rq.length){cur=rq.shift();ql=sm.q}}
+else if(sm.algo==='SRTF'){cur=ready.length?ready.reduce((m,i)=>rem[i]<rem[m]?i:m):null}
+else if(cur===null&&ready.length){const k={FCFS:i=>ps[i].a,SJF:i=>ps[i].b,PRIO:i=>ps[i].p}[sm.algo];cur=ready.reduce((m,i)=>k(i)<k(m)?i:m)}
+tl.push(cur===null?-1:cur);
+if(cur!==null){rem[cur]--;ql--;if(rem[cur]===0){fin[cur]=t+1;done++;cur=null;ql=0}}}
+return{tl,fin}}
+function sim(){
+const {tl,fin}=simulate(),segs=[];tl.forEach((x,t)=>{const l=segs[segs.length-1];l&&l.x===x?l.len++:segs.push({x,len:1,t})});
+const ret=sm.ps.map((p,i)=>fin[i]-p.a),esp=sm.ps.map((p,i)=>ret[i]-p.b),avg=a=>(a.reduce((s,v)=>s+v,0)/a.length).toFixed(2);
+const W=28;
+app.innerHTML=`<div class="card" style="--c:var(--ink)"><div class="filters"><label>Algoritmo <select id="al">${Object.entries(ALGOS).map(([k,v])=>`<option value="${k}" ${sm.algo===k?'selected':''}>${v}</option>`).join('')}</select></label>${sm.algo==='RR'?`<label>Quantum <input id="qq" type="number" min="1" max="20" value="${sm.q}" style="width:60px;padding:5px;border:1px solid var(--line);border-radius:6px;background:var(--bg)"></label>`:''}</div>
+<div class="tw"><table><thead><tr><th>Proceso</th><th>Llegada</th><th>Ráfaga</th>${sm.algo==='PRIO'?'<th>Prioridad</th>':''}<th>Retorno</th><th>Espera</th><th></th></tr></thead><tbody>${sm.ps.map((p,i)=>`<tr><td><span class="sw" style="background:${COL[i%8]}"></span>P${i+1}</td><td><input type="number" min="0" max="50" data-i="${i}" data-f="a" value="${p.a}" aria-label="Llegada P${i+1}"></td><td><input type="number" min="1" max="30" data-i="${i}" data-f="b" value="${p.b}" aria-label="Ráfaga P${i+1}"></td>${sm.algo==='PRIO'?`<td><input type="number" min="1" max="9" data-i="${i}" data-f="p" value="${p.p}" aria-label="Prioridad P${i+1}"></td>`:''}<td>${ret[i]}</td><td>${esp[i]}</td><td><button class="btn" data-del="${i}" aria-label="Quitar P${i+1}" ${sm.ps.length<2?'disabled':''}>Quitar</button></td></tr>`).join('')}</tbody></table></div>
+<div class="row"><button class="btn" id="add" ${sm.ps.length>=8?'disabled':''}>Agregar proceso</button></div>
+<div class="stats"><div><b>${avg(ret)}</b><span class="hint">Turnaround promedio</span></div><div><b>${avg(esp)}</b><span class="hint">Espera promedio</span></div><div><b>${tl.length}</b><span class="hint">Tiempo total</span></div></div></div>
+<div class="card" style="--c:var(--ink);margin-top:14px"><b>Diagrama de Gantt</b><div class="gw"><div class="gantt">${segs.map(s=>`<div class="seg ${s.x<0?'idle':''}" style="width:${s.len*W}px;${s.x>=0?'background:'+COL[s.x%8]:''}">${s.x<0?'':'P'+(s.x+1)}<span class="t">${s.t}</span></div>`).join('')}<span class="hint" style="align-self:flex-end;margin:0 0 -22px 4px;font-size:12px">${tl.length}</span></div></div><p class="note">Las franjas rayadas son tiempo de CPU ociosa. Cambiá los datos y compará el turnaround entre algoritmos. Los empates se resuelven por orden de proceso.</p></div>`;
+$('#al').onchange=e=>{sm.algo=e.target.value;render()};
+$('#qq')&&($('#qq').onchange=e=>{sm.q=Math.max(1,+e.target.value||1);render()});
+app.querySelectorAll('input[data-i]').forEach(inp=>inp.onchange=()=>{sm.ps[+inp.dataset.i][inp.dataset.f]=Math.max(inp.dataset.f==='b'?1:0,+inp.value||0);render()});
+app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{sm.ps.splice(+b.dataset.del,1);render()});
+$('#add').onclick=()=>{sm.ps.push({a:sm.ps.length,b:3,p:2});render()};
+}
+function render(){nav();({cards,quiz,sim})[S.tab]()}
+render();
+</script>
+</body>
+</html>
